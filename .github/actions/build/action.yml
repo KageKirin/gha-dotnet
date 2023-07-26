@@ -1,0 +1,18 @@
+name: Build .NET
+inputs:
+  configuration:
+    required: false
+    default: Debug
+  framework:
+    required: true
+runs:
+  using: composite
+  steps:
+  - name: Build (${{ inputs.configuration }}) ${{ inputs.framework }}
+    shell: bash
+    run: |-
+      config=${{ inputs.configuration }}
+      framework=${{ inputs.framework }}
+      for a in $(rg --files-with-matches  --type-add "csp:*.csproj" -tcsp "${framework}"); do
+        dotnet build -f ${framework} -c ${config} $a
+      done
