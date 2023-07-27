@@ -1,0 +1,16 @@
+name: Format source using CSharpier
+runs:
+  using: composite
+  steps:
+  - name: Run CSharpier
+    shell: bash
+    run: |-
+      dotnet csharpier `fdfind cs$`
+  - name: Fix line endings
+    shell: bash
+    run: |-
+      dos2unix `fdfind cs$`
+  - name: Remove byte order mark (BOM)
+    shell: bash
+    run: |-
+      LANG=C LC_ALL=C sed -i '1s/^\xEF\xBB\xBF//' `fdfind cs$`
