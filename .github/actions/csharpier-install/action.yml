@@ -1,0 +1,14 @@
+name: Install CSharpier
+runs:
+  using: composite
+  steps:
+  - name: Install
+    shell: bash
+    run: |-
+      dotnet tool install -g csharpier
+  - name: Verify installation
+    shell: bash
+    run: |-
+      which dotnet-csharpier
+      dotnet csharpier --version
+      dotnet csharpier --help

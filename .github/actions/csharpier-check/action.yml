@@ -1,0 +1,8 @@
+name: Check for correct formatting using CSharpier
+runs:
+  using: composite
+  steps:
+  - name: Run CSharpier check
+    shell: bash
+    run: |-
+      dotnet csharpier --check `fdfind cs$`
