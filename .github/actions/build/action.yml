@@ -14,5 +14,7 @@ runs:
       configuration=${{ inputs.configuration }}
       framework=${{ inputs.framework }}
       for a in $(rg --files-with-matches  --type-add "csp:*.csproj" -tcsp "${framework}"); do
+        echo "Building $a with ${framework}/${configuration}"
+        echo dotnet build -f ${framework} -c ${configuration} $a
         dotnet build -f ${framework} -c ${configuration} $a
       done
