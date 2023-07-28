@@ -11,8 +11,8 @@ runs:
   - name: Build (${{ inputs.configuration }}) ${{ inputs.framework }}
     shell: bash
     run: |-
-      config=${{ inputs.configuration }}
+      configuration=${{ inputs.configuration }}
       framework=${{ inputs.framework }}
       for a in $(rg --files-with-matches  --type-add "csp:*.csproj" -tcsp "${framework}"); do
-        dotnet build -f ${framework} -c ${config} $a
+        dotnet build -f ${framework} -c ${configuration} $a
       done
