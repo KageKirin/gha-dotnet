@@ -8,7 +8,7 @@ inputs:
 runs:
   using: composite
   steps:
-  - uses: "./.github/actions/build"
+  - uses: kagekirin/gha-dotnet/.github/actions/build@main
     with:
       configuration: "${{ inputs.configuration }}"
       framework: "${{ inputs.framework }}"
