@@ -3,9 +3,11 @@ inputs:
   name:
     required: true
   registry:
-    required: true
+    required: false
+    default: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
   username:
-    required: true
+    required: false
+    default: ${{ github.repository_owner }}
   token:
     required: true
 runs:
