@@ -1,0 +1,41 @@
+name: Fetch NuGet package from registry
+inputs:
+  package:
+    required: true
+  registry:
+    required: false
+    default: '' #https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+  framework:
+    required: false
+    default: ''
+  version:
+    required: false
+    default: ''
+  prerelease:
+    required: false
+    type: boolean
+    default: false
+  outdir:
+    required: true
+runs:
+  using: composite
+  steps:
+  - name: Fetch package ${{ inputs.package }}
+    shell: bash
+    run: |-
+      source=${{ inputs.registry }}
+      [[ ! -z ${source} ]] && source="-Source ${source}"
+
+      framework=${{ inputs.framework }}
+      [[ ! -z ${framework} ]] && framework="-Framework ${framework}"
+
+      version=${{ inputs.version }}
+      [[ ! -z ${version} ]] && version="-version ${version}"
+
+      [[ ${{ inputs.prerelease}} ]] && prerelease="-Prerelease"
+
+      outdir=${{ inputs.outdir }}
+      [[ ! -z ${outdir} ]] && outdir="-OutputDirectory ${outdir}"
+
+      echo "nuget install ${{ inputs.package }} ${version} ${prerelease} -DirectDownload -NonInteractive  ${outdir} ${framework} ${source}"
+      nuget install ${{ inputs.package }} ${version} ${prerelease} -DirectDownload -NonInteractive  ${outdir} ${framework} ${source}
