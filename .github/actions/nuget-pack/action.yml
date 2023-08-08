@@ -1,5 +1,10 @@
 name: nuget pack
 inputs:
+  path:
+    description: path from where to run the actions
+    type: string
+    required: false
+    default: ${{ github.workspace }}
   configuration:
     required: false
     default: Release
@@ -15,8 +20,10 @@ runs:
   - name: Run nuget pack with ${{ inputs.framework }}
     shell: bash
     run: |-
+      pushd ${{ inputs.path }}
       framework=${{ inputs.framework }}
       for a in $(rg --files-with-matches  --type-add "csp:*.csproj" -tcsp "${framework}"); do
         dotnet pack -c ${{ inputs.configuration }} -p:TargetFramework=${framework} $a || echo "Error"
       done
       fdfind --no-ignore nupkg$
+      popd
