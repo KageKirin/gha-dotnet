@@ -1,16 +1,28 @@
 name: Format source using CSharpier
+inputs:
+  path:
+    description: path from where to run the actions
+    type: string
+    required: false
+    default: ${{ github.workspace }}
 runs:
   using: composite
   steps:
   - name: Run CSharpier
     shell: bash
     run: |-
+      pushd ${{ inputs.path }}
       dotnet csharpier `fdfind cs$`
+      popd
   - name: Fix line endings
     shell: bash
     run: |-
+      pushd ${{ inputs.path }}
       dos2unix `fdfind cs$`
+      popd
   - name: Remove byte order mark (BOM)
     shell: bash
     run: |-
+      pushd ${{ inputs.path }}
       LANG=C LC_ALL=C sed -i '1s/^\xEF\xBB\xBF//' `fdfind cs$`
+      popd
