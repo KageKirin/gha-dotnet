@@ -1,5 +1,10 @@
 name: Fetch NuGet package from registry
 inputs:
+  path:
+    description: path from where to run the actions
+    type: string
+    required: false
+    default: ${{ github.workspace }}
   package:
     required: true
   registry:
@@ -23,6 +28,8 @@ runs:
   - name: Fetch package ${{ inputs.package }}
     shell: bash
     run: |-
+      pushd ${{ inputs.path }}
+
       source=${{ inputs.registry }}
       [[ ! -z ${source} ]] && source="-Source ${source}"
 
@@ -39,3 +46,4 @@ runs:
 
       echo "nuget install ${{ inputs.package }} ${version} ${prerelease} -DirectDownload -NonInteractive  ${outdir} ${framework} ${source}"
       nuget install ${{ inputs.package }} ${version} ${prerelease} -DirectDownload -NonInteractive  ${outdir} ${framework} ${source}
+      popd
