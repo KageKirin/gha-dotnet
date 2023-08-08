@@ -1,8 +1,16 @@
 name: Check for correct formatting using CSharpier
+inputs:
+  path:
+    description: path from where to run the actions
+    type: string
+    required: false
+    default: ${{ github.workspace }}
 runs:
   using: composite
   steps:
   - name: Run CSharpier check
     shell: bash
     run: |-
+      pushd ${{ inputs.path }}
       dotnet csharpier --check `fdfind cs$`
+      popd
