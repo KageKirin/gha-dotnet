@@ -1,5 +1,10 @@
 name: Build .NET
 inputs:
+  path:
+    description: path from where to run the actions
+    type: string
+    required: false
+    default: ${{ github.workspace }}
   configuration:
     required: false
     default: Debug
@@ -11,6 +16,7 @@ runs:
   - name: Build (${{ inputs.configuration }}) ${{ inputs.framework }}
     shell: bash
     run: |-
+      pushd ${{ inputs.path }}
       configuration=${{ inputs.configuration }}
       framework=${{ inputs.framework }}
       for a in $(rg --files-with-matches  --type-add "csp:*.csproj" -tcsp "${framework}"); do
@@ -18,3 +24,4 @@ runs:
         echo dotnet build -f ${framework} -c ${configuration} $a
         dotnet build -f ${framework} -c ${configuration} $a
       done
+      popd
