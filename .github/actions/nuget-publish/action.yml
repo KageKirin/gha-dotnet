@@ -1,5 +1,10 @@
 name: nuget publish
 inputs:
+  path:
+    description: path from where to run the actions
+    type: string
+    required: false
+    default: ${{ github.workspace }}
   registry:
     required: false
     default: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
@@ -11,5 +16,7 @@ runs:
   - name: nuget push to ${{ inputs.registry }}
     shell: bash
     run: |-
+      pushd ${{ inputs.path }}
       fdfind --no-ignore nupkg$
       fdfind --no-ignore nupkg$ -x dotnet nuget push {} --api-key ${{ inputs.token }}  --source "${{ inputs.registry }}"
+      popd
