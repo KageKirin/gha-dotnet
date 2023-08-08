@@ -1,0 +1,34 @@
+name: List NuGet package versions available on registry
+inputs:
+  package:
+    required: true
+  registry:
+    required: false
+    default: '' #https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+  prerelease:
+    required: false
+    type: boolean
+    default: false
+outputs:
+  versions:
+    type: string
+    value: 
+runs:
+  using: composite
+  steps:
+  - name: List versions for ${{ inputs.package }}
+    shell: pwsh
+    run: |-
+      $source = "${{ inputs.registry }}"
+      if (! [string]::IsNullOrWhiteSpace($source))
+        source="-Source $source"
+
+      $destination = "${{ inputs.outdir }}"
+      if (! [string]::IsNullOrWhiteSpace($destination))
+        destination="-Destination $destination"
+
+      $prerelease = ""
+      if (${{ inputs.prerelease}})
+        $prerelease = "-IncludePrerelease"
+
+      Get-Package -Filter ${{ inputs.package }} -ListAvailable -AllVersions $source $prerelease
