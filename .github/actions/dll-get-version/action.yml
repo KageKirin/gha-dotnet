@@ -1,0 +1,22 @@
+name: Get DLL version
+inputs:
+  file:
+    description: path to DLL
+    required: true
+outputs:
+  version:
+    description: version retrieved from inputs.file
+    value: ${{ steps.get.outputs.version }}
+runs:
+  using: composite
+  steps:
+  - id: get
+    name: Get package version from ${{ inputs.file }}
+    shell: bash
+    run: |-
+      version=$(pwsh -Command "(get-item ${{ inputs.file }}).VersionInfo.ProductVersion")
+      echo ${version}
+      echo "version=${version}" >> $GITHUB_OUTPUT
+  - shell: bash
+    run: |-
+      echo ${{ steps.get.outputs.version }}
