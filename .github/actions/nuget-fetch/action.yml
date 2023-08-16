@@ -21,7 +21,8 @@ inputs:
     type: boolean
     default: false
   outdir:
-    required: true
+    required: false
+    default: ''
 runs:
   using: composite
   steps:
