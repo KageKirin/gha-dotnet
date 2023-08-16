@@ -12,11 +12,11 @@ runs:
   steps:
   - id: get
     name: Get package version from ${{ inputs.file }}
-    shell: bash
+    shell: pwsh
     run: |-
-      version=$(pwsh -Command "(get-item ${{ inputs.file }}).VersionInfo.ProductVersion")
-      echo ${version}
-      echo "version=${version}" >> $GITHUB_OUTPUT
+      $version = $((Get-Item ${{ inputs.file }}).VersionInfo.ProductVersion) -join "`n"
+      Write-Output $version
+      Write-Output $version >> $Env:GITHUB_OUTPUT
   - shell: bash
     run: |-
       echo ${{ steps.get.outputs.version }}
