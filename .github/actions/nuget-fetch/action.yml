@@ -39,14 +39,14 @@ runs:
       $framework = (! [string]::IsNullOrEmpty( $framework )) ? "-Framework $framework" : ""
 
       $version = "${{ inputs.version }}"
-      $version = (! [string]::IsNullOrEmpty( $version )) ? "-version $version" : ""
+      $version = (! [string]::IsNullOrEmpty( $version )) ? "-Version $version" : ""
 
       $prerelease = ($${{ inputs.prerelease}}) ? "-Prerelease" : ""
 
       $outdir = "${{ inputs.outdir }}"
       $outdir = (! [string]::IsNullOrEmpty( $outdir )) ? "-OutputDirectory $outdir" : ""
 
-      echo "nuget install ${{ inputs.package }} $version $prerelease -DirectDownload -NonInteractive  $outdir $framework $source"
-      nuget install ${{ inputs.package }} $version $prerelease -DirectDownload -NonInteractive  $outdir $framework $source
+      echo "nuget install ${{ inputs.package }} $version.Split(" ") $prerelease -DirectDownload -NonInteractive  $outdir.Split(" ") $framework.Split(" ") $source.Split(" ")"
+      nuget install ${{ inputs.package }} $version.Split(" ") $prerelease -DirectDownload -NonInteractive  $outdir.Split(" ") $framework.Split(" ") $source.Split(" ")
 
       Pop-Location
