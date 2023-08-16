@@ -30,18 +30,18 @@ runs:
     run: |-
       Push-Location ${{ inputs.path }}
 
-      $source = ${{ inputs.registry }}
+      $source = "${{ inputs.registry }}"
       $source = [string]::IsNullOrEmpty( $source ) ? "-Source $source" : ""
 
-      $framework = ${{ inputs.framework }}
+      $framework = "${{ inputs.framework }}"
       $framework = [string]::IsNullOrEmpty( $framework ) ? "-Framework $framework" : ""
 
-      $version = ${{ inputs.version }}
+      $version = "${{ inputs.version }}"
       $version = [string]::IsNullOrEmpty( $version ) ? "-version $version" : ""
 
       $prerelease = ($${{ inputs.prerelease}}) ? "-Prerelease" : ""
 
-      $outdir = ${{ inputs.outdir }}
+      $outdir = "${{ inputs.outdir }}"
       $outdir = [string]::IsNullOrEmpty( $outdir ) ? "-OutputDirectory $outdir" : ""
 
       echo "nuget install ${{ inputs.package }} $version $prerelease -DirectDownload -NonInteractive  $outdir $framework $source"
