@@ -25,6 +25,6 @@ runs:
       $version = $((Get-Item ${{ inputs.file }}).VersionInfo.${{ inputs.version-type }}) -join "`n"
       echo "version: $version"
       echo "version=$version" >> $Env:GITHUB_OUTPUT
-  - shell: bash
+  - shell: pwsh
     run: |-
       echo ${{ steps.get.outputs.version }}
