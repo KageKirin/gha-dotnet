@@ -3,6 +3,14 @@ inputs:
   file:
     description: path to DLL
     required: true
+  version-type:
+    description: DLL version type to get
+    type: choice
+    options:
+    - FileVersion
+    - ProductVersion
+    required: false
+    default: ProductVersion
 outputs:
   version:
     description: version retrieved from inputs.file
@@ -14,9 +22,9 @@ runs:
     name: Get package version from ${{ inputs.file }}
     shell: pwsh
     run: |-
-      $version = $((Get-Item ${{ inputs.file }}).VersionInfo.ProductVersion) -join "`n"
+      $version = $((Get-Item ${{ inputs.file }}).VersionInfo.${{ inputs.version-type }}) -join "`n"
       echo "version: $version"
       echo "version=$version" >> $Env:GITHUB_OUTPUT
-  - shell: bash
+  - shell: pwsh
     run: |-
       echo ${{ steps.get.outputs.version }}
