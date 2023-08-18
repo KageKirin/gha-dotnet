@@ -23,7 +23,7 @@ runs:
 
       foreach($project in @(rg --files-with-matches  --type-add "csp:*.csproj" -tcsp "$framework"))
       {
-        echo "Building $project with $framework:$configuration"
+        echo "Building $project with $framework : $configuration"
         echo "dotnet build -f $framework -c $configuration $project"
         dotnet build -f $framework -c $configuration $project
       }
