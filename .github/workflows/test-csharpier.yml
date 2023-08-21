@@ -1,0 +1,29 @@
+name: test-csharpier
+
+on:
+  pull_request:
+    paths:
+    - .github/actions/csharpier*
+    - .github/workflows/test-csharpier.yml
+    types: [opened, reopened, synchronize]
+  push:
+    paths:
+    - .github/actions/csharpier*
+    - .github/workflows/test-csharpier.yml
+    branches-ignore:
+    - 'main'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: kagekirin/gha-utils/.github/actions/git-checkout-tags@main
+    - uses: kagekirin/gha-utils/.github/actions/install-prerequisites@main
+    - uses: ./.github/actions/csharpier-install
+    - uses: ./.github/actions/csharpier-format
+      with:
+        path: testdata/HelloWorld
+    - uses: ./.github/actions/csharpier-check
+      with:
+        path: testdata/HelloWorld
