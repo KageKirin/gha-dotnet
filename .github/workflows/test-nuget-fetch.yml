@@ -1,0 +1,37 @@
+name: test-nuget-fetch
+
+on:
+  pull_request:
+    paths:
+    - .github/actions/nuget-fetch/action.yml
+    - .github/workflows/test-nuget-fetch.yml
+    types: [opened, reopened, synchronize]
+  push:
+    paths:
+    - .github/actions/nuget-fetch/action.yml
+    - .github/workflows/test-nuget-fetch.yml
+    branches-ignore:
+    - 'main'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        framework: [net6.0, net7.0]
+        package: [ 'System.Text.Json']
+        registry: ['', 'https://api.nuget.org/v3/index.json']
+        version: ['', '7.0.3']
+        prerelease: [true, false]
+        outdir: ['', 'foobar']
+    steps:
+    - uses: kagekirin/gha-utils/.github/actions/git-checkout-tags@main
+    - uses: ./.github/actions/nuget-fetch
+      with:
+        framework: ${{ matrix.framework }}
+        package: ${{ matrix.package }}
+        registry: ${{ matrix.registry }}
+        version: ${{ matrix.version }}
+        prerelease: ${{ matrix.prerelease }}
+        outdir: ${{ matrix.outdir }}
