@@ -6,9 +6,13 @@ inputs:
     required: false
     default: ${{ github.workspace }}
   configuration:
+    description: configuration to build for (Debug, Release, ...)
+    type: string
     required: false
     default: Debug
   framework:
+    description: framework to build for (Debug, Release, ...)
+    type: string
     required: true
 runs:
   using: composite
