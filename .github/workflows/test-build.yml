@@ -1,0 +1,31 @@
+name: test-build
+
+on:
+  pull_request:
+    paths:
+    - .github/actions/build/action.yml
+    - .github/workflows/test-build.yml
+    types: [opened, reopened, synchronize]
+  push:
+    paths:
+    - .github/actions/build/action.yml
+    - .github/workflows/test-build.yml
+    branches-ignore:
+    - 'main'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+        framework: [net7.0]
+    steps:
+    - uses: kagekirin/gha-utils/.github/actions/git-checkout-tags@main
+    - uses: kagekirin/gha-utils/.github/actions/install-prerequisites@main
+    - uses: ./.github/actions/build
+      with:
+        path: testdata/HelloWorld
+        configuration: ${{ matrix.configuration }}
+        framework: ${{ matrix.framework }}

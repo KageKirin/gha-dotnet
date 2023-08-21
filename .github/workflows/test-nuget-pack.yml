@@ -1,0 +1,31 @@
+name: test-nuget-pack
+
+on:
+  pull_request:
+    paths:
+    - .github/actions/nuget-pack/action.yml
+    - .github/workflows/test-nuget-pack.yml
+    types: [opened, reopened, synchronize]
+  push:
+    paths:
+    - .github/actions/nuget-pack/action.yml
+    - .github/workflows/test-nuget-pack.yml
+    branches-ignore:
+    - 'main'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        configuration: [Debug, Release]
+        framework: [net7.0]
+    steps:
+    - uses: kagekirin/gha-utils/.github/actions/git-checkout-tags@main
+    - uses: kagekirin/gha-utils/.github/actions/install-prerequisites@main
+    - uses: ./.github/actions/nuget-pack
+      with:
+        path: testdata/HelloWorld
+        configuration: ${{ matrix.configuration }}
+        framework: ${{ matrix.framework }}
