@@ -25,5 +25,5 @@ runs:
       for a in $(rg --files-with-matches  --type-add "csp:*.csproj" -tcsp "${framework}"); do
         dotnet pack -c ${{ inputs.configuration }} -p:TargetFramework=${framework} $a || echo "Error"
       done
-      fdfind --no-ignore nupkg$
+      fdfind -tf --no-ignore nupkg$
       popd
