@@ -14,6 +14,7 @@ runs:
   using: composite
   steps:
   - name: Add NuGet source ${{ inputs.registry }}
+    if: inputs.registry != 'https://api.nuget.org/v3/index.json'
     shell: bash
     run: |-
       dotnet nuget add source --username "${{ inputs.username }}" --password "${{ inputs.token }}" --store-password-in-clear-text --name ${{ inputs.name }} "${{ inputs.registry }}"
