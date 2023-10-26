@@ -17,6 +17,6 @@ runs:
     shell: bash
     run: |-
       pushd ${{ inputs.path }}
-      fdfind -tf --no-ignore nupkg$
-      fdfind -tf --no-ignore nupkg$ -x dotnet nuget push {} --api-key ${{ inputs.token }}  --source "${{ inputs.registry }}"
+      fdfind -tf --no-ignore "\.nupkg$"
+      fdfind -tf --no-ignore "\.nupkg$" -x dotnet nuget push {} --api-key ${{ inputs.token }}  --source "${{ inputs.registry }}"  --skip-duplicate
       popd
