@@ -11,7 +11,7 @@ inputs:
     required: false
     default: Debug
   framework:
-    description: framework to build for (Debug, Release, ...)
+    description: framework to build for (net8.0, netstandard2.1, ...)
     type: string
     required: true
 runs:
