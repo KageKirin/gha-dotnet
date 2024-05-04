@@ -14,9 +14,11 @@ runs:
   using: composite
   steps:
   - name: nuget push to ${{ inputs.registry }}
-    shell: bash
+    shell: pwsh
     run: |-
-      pushd ${{ inputs.path }}
+      Push-Location ${{ inputs.path }}
+
       fdfind -tf --no-ignore "[^(\.symbols)]\.nupkg$"
       fdfind -tf --no-ignore "[^(\.symbols)]\.nupkg$" -x dotnet nuget push {} --api-key ${{ inputs.token }}  --source "${{ inputs.registry }}"  --skip-duplicate
-      popd
+
+      Pop-Location
