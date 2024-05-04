@@ -18,7 +18,14 @@ runs:
     run: |-
       Push-Location ${{ inputs.path }}
 
+      $token = "${{ inputs.token }}"
+      $registry = "${{ inputs.registry }}"
+
       fdfind -tf --no-ignore "[^(\.symbols)]\.nupkg$"
-      fdfind -tf --no-ignore "[^(\.symbols)]\.nupkg$" -x dotnet nuget push {} --api-key ${{ inputs.token }}  --source "${{ inputs.registry }}"  --skip-duplicate
+      foreach ($package in @(fdfind -tf --no-ignore "[^(\.symbols)]\.nupkg$"))
+      {
+        echo "dotnet nuget push $package --api-key $token  --source $registry  --skip-duplicate"
+        dotnet nuget push $package --api-key $token  --source $registry  --skip-duplicate
+      }
 
       Pop-Location
