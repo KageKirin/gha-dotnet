@@ -16,7 +16,8 @@ inputs:
     default: ${{ github.repository_owner }}
   token:
     description: A GitHub token with "packages:read" permissions for the given registry
-    required: true
+    required: false
+    default: ${{ github.token }}
 runs:
   using: composite
   steps:
