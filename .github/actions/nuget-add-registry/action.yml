@@ -1,14 +1,21 @@
 name: Add NuGet Registry
+description: >
+  GitHub action to add a NuGet registry
+
 inputs:
   name:
+    description: Name/Alias of the NuGet registry to add (must be unique)
     required: true
   registry:
+    description: URL of the NuGet registry to add
     required: false
     default: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
   username:
+    description: A valid username for the given registry
     required: false
     default: ${{ github.repository_owner }}
   token:
+    description: A GitHub token with "packages:read" permissions for the given registry
     required: true
 runs:
   using: composite
