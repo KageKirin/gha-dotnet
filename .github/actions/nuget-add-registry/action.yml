@@ -18,6 +18,7 @@ inputs:
     description: A GitHub token with "packages:read" permissions for the given registry
     required: false
     default: ${{ github.token }}
+
 runs:
   using: composite
   steps:
@@ -26,8 +27,14 @@ runs:
     shell: bash
     run: |-
       dotnet nuget add source --username "${{ inputs.username }}" --password "${{ inputs.token }}" --store-password-in-clear-text --name ${{ inputs.name }} "${{ inputs.registry }}"
+
   - name: Add NuGet source ${{ inputs.registry }} without credentials
     if: ${{ inputs.registry != 'https://api.nuget.org/v3/index.json' && (inputs.username == '' || inputs.token == '') }}
     shell: bash
     run: |-
       dotnet nuget add source --username "${{ inputs.username }}" --password "${{ inputs.token }}" --store-password-in-clear-text --name ${{ inputs.name }} "${{ inputs.registry }}"
+
+  - name: Verify registry addition
+    shell: bash
+    run: |-
+      dotnet nuget list source
