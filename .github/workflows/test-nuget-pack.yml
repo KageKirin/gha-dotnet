@@ -30,8 +30,12 @@ jobs:
     steps:
     - uses: kagekirin/gha-utils/.github/actions/git-checkout-tags@main
     - uses: kagekirin/gha-utils/.github/actions/install-prerequisites@main
-    - uses: ./.github/actions/nuget-pack
+    - id: nuget-pack
+      uses: ./.github/actions/nuget-pack
       with:
         path: testdata/HelloWorld
         configurations: ${{ matrix.configurations }}
         frameworks: ${{ matrix.frameworks }}
+    - shell: bash
+      run: |-
+        echo "${{ steps.nuget-pack.outputs.packages }}"

@@ -35,6 +35,12 @@ inputs:
     required: false
     default: ''
 
+outputs:
+  packages:
+    description: >
+      space-separated list of created .nupkg files
+    value: ${{ steps.get-nupkg.outputs.packages }}
+
 runs:
   using: composite
   steps:
@@ -87,7 +93,8 @@ runs:
       os.chdir(basedir)
       exit(err)
 
-  - name: List packaged files (nupkg)
+  - id: get-nupkg
+    name: List packaged files (nupkg)
     shell: python
     env:
       build_path: ${{ inputs.path }}
@@ -98,8 +105,11 @@ runs:
       basedir = os.getcwd()
       os.chdir(str(os.getenv('build_path')))
 
-      nupkgs = [g.as_posix() for g in Path('.').rglob('*.nupkg')]
-      print(f'created nupkg files: {nupkgs}')
+      packages = list(set([g.as_posix() for g in Path('.').rglob('*.nupkg')]))
+      print(f'found packages: {packages}')
+
+      with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+        print(f'packages={" ".join(packages)}', file=fh)
 
       os.chdir(basedir)
       exit(0)
