@@ -19,13 +19,19 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        configuration: [Debug, Release]
-        framework: [net7.0]
+        configurations:
+        - ''
+        - Debug
+        - Release
+        - Debug Release
+        frameworks:
+        - ''
+        - net7.0
     steps:
     - uses: kagekirin/gha-utils/.github/actions/git-checkout-tags@main
     - uses: kagekirin/gha-utils/.github/actions/install-prerequisites@main
     - uses: ./.github/actions/build
       with:
         path: testdata/HelloWorld
-        configuration: ${{ matrix.configuration }}
-        framework: ${{ matrix.framework }}
+        configurations: ${{ matrix.configurations }}
+        frameworks: ${{ matrix.frameworks }}
