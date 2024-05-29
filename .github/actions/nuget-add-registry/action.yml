@@ -24,17 +24,26 @@ runs:
   steps:
   - name: Add NuGet source ${{ inputs.registry }} with credentials
     if: ${{ inputs.registry != 'https://api.nuget.org/v3/index.json' }}
-    shell: bash
+    shell: python
     run: |-
-      dotnet nuget add source --username "${{ inputs.username }}" --password "${{ inputs.token }}" --store-password-in-clear-text --name ${{ inputs.name }} "${{ inputs.registry }}"
+      import os
+
+      err = os.system('dotnet nuget add source --username "${{ inputs.username }}" --password "${{ inputs.token }}" --store-password-in-clear-text --name ${{ inputs.name }} "${{ inputs.registry }}"')
+      exit(err)
 
   - name: Add NuGet source ${{ inputs.registry }} without credentials
     if: ${{ inputs.registry != 'https://api.nuget.org/v3/index.json' && (inputs.username == '' || inputs.token == '') }}
-    shell: bash
+    shell: python
     run: |-
-      dotnet nuget add source --username "${{ inputs.username }}" --password "${{ inputs.token }}" --store-password-in-clear-text --name ${{ inputs.name }} "${{ inputs.registry }}"
+      import os
+
+      err = os.system('dotnet nuget add source --username "${{ inputs.username }}" --password "${{ inputs.token }}" --store-password-in-clear-text --name ${{ inputs.name }} "${{ inputs.registry }}"')
+      exit(err)
 
   - name: Verify registry addition
-    shell: bash
+    shell: python
     run: |-
-      dotnet nuget list source
+      import os
+
+      err = os.system('dotnet nuget list source')
+      exit(err)
