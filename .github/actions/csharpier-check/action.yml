@@ -1,16 +1,52 @@
 name: Check for correct formatting using CSharpier
+description: >
+  Checks projects for correct formatting using CSharpier
+
 inputs:
   path:
     description: path from where to run the actions
     type: string
     required: false
     default: ${{ github.workspace }}
+  projects:
+    description: >
+      project(s) to check
+      empty string (default) defers to project defaults
+      whitespace separated list. can use glob pattern.
+      empty string (default) defers to solution.
+    type: string
+    required: false
+    default: ''
+
 runs:
   using: composite
   steps:
   - name: Run CSharpier check
-    shell: bash
+    shell: python
+    env:
+      build_path: ${{ inputs.path }}
+      build_projects: ${{ inputs.projects }}
     run: |-
-      pushd ${{ inputs.path }}
-      dotnet csharpier --check `fdfind cs$`
-      popd
+      import os, sys, itertools
+      from pathlib import Path
+
+      basedir = os.getcwd()
+      os.chdir(str(os.getenv('build_path')))
+
+      projects = str(os.getenv('build_projects')).split()
+      projects = [p for p in map(lambda f: [g.as_posix() for g in Path('.').rglob(f)], projects)]
+      projects = list(set([p for p in itertools.chain.from_iterable(projects)]))
+
+      if len(projects) == 0:
+        projects.append('')
+
+      for project in projects:
+        print(f'checking {project}')
+        command = f'dotnet csharpier --check {Path(project).parent}'
+        print(command)
+        err = os.system(command)
+        if err != 0:
+          exit(err)
+
+      os.chdir(basedir)
+      exit(0)
